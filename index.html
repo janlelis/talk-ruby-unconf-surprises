@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Idiosyncratic Ruby</title>
+
+    <meta name="description" content="Idiosyncratic Ruby">
+    <meta name="author" content="Jan Lelis">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" href="lib/css/github.css">
+    <link href='https://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <style>
+      .reveal section img {
+        box-shadow: none;
+        border: 0px;
+      }
+      .reveal section img.no-shadow {
+        /*box-shadow: none;*/
+        background: #f3f3f3;
+      }
+      .reveal pre code {
+        font-size: 20pt;
+        line-height: 23pt;
+        /*margin: 0px -200px;*/
+        margin-top: 2em;
+        /*border: 1px solid #ccc !important;*/
+        margin-bottom: 2em;
+      }
+      pre{
+        /*box-shadow: none !important;*/
+      }
+      /*.reveal pre .xml .ruby {
+        opacity: 1;
+        color: #fff;
+      }*/
+
+      .reveal p {
+        font-size: 33pt;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="reveal">
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <section>
+            <img src="images/idiosyncratic.png"/>
+            <br/>
+            <br/>
+            <h2>Ruby is Full of Surprises</h2>
+            <br/>
+
+            <p><a href="https://twitter.com/JanLelis">@JanLelis</a> — <a href="https://twitter.com/JanLelis">May 2018</a> — <a href="http://berlin.onruby.de/">Ruby Unconf</a></p>
+          </section>
+
+          <section>
+            <img src="images/idiosyncratic.png"/>
+            <h2><a href="http://idiosyncratic-ruby.com">idiosyncratic-ruby.com</a></h2>
+            <p>Documenting lesser-known features in Ruby</p>
+            <br>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <code data-trim contenteditable class="ruby">
+begin with an easy program.<br/>
+you should be able to write<br/>
+a program unless for you,<br/>
+program in ruby language is<br/>
+too difficult. At the end<br/>
+of your journey towards the<br/>
+ultimate program; you must<br/>
+be a part of a programming<br/>
+language. You will end if<br/>
+you != program
+            </code>
+
+            <p>
+              <br/>
+              2nd place in the Ruby TRICK competition of 2015,<br/>by <strong>Shinichiro Hamaji</strong>
+            </p>
+
+            <p class="fragment">
+              <br/>
+              <code>$ ruby -c poem.rb # => Syntax OK</code>
+            </p>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>PoLS</h1>
+            <h3 class="fragment">Principle of Least Surprise</h3>
+            <p class="fragment">…when you know Ruby <span class="fragment"><br/><strong>…very, very, very vell</strong></span></p>
+          </section>
+
+          <section>
+            <img src="/images/mametter.png"/>
+            <p>By <strong>Yusuke Endoh</strong>, the master of esoteric programming</p>
+          </section>
+
+          <section>
+            <h2>Monumental Quine</h2>
+            <img src="/images/rlquine.png"/>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Surpring Method Behavior</h2>
+          </section>
+
+          <section>
+            <h3>Question 3</h3>
+            <p>There is a <code>String#split</code> method,<br>which also accepts regexes:</p>
+            <pre><code data-trim contenteditable class="ruby">
+"rug-b".split(/-/) #=> ["rug", "b"]
+            </code></pre>
+            <div class="fragment">
+              <p>What will happen if we use a capturing group in the regex?</p>
+              <pre><code data-trim contenteditable class="ruby">
+  "rug-b".split(/(-)/) #=> ?
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h3>Question 3</h3>
+            <pre><code data-trim contenteditable class="ruby">
+"rug-b".split(/(-)/) #=> ["rug", "-", "b"]
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>Bonus Question 3</h3>
+            <p>What will happen if we use a multiple capturing groups?</p>
+            <pre class="fragment"><code data-trim contenteditable class="ruby">
+"rug-b".split(/((-))/) #=> ?
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>Bonus Question 3</h3>
+            <p>What will happen if we use a multiple capturing groups?</p>
+            <pre><code data-trim contenteditable class="ruby">
+"rug-b".split(/((-))/) #=> ["rug", "-", "-", "b"]
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>Bonus Bonus</h3>
+            <pre><code data-trim contenteditable class="ruby">
+"rug-b".split(/(((((-)))))/)
+#=> ["rug", "-", "-", "-", "-", "-", "b"]
+            </code></pre>
+            <pre class="fragment"><code data-trim contenteditable class="ruby">
+"rug-b".split(/-(?=(.))/)
+#=> ["rug", "b", "b"]
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>String#succ</h3>
+            <p>There is a String method that will generate the <strong>successor</strong> of a string</p>
+            <pre><code data-trim contenteditable class="ruby">
+"aaa".succ #=> "aab"
+            </code></pre>
+
+            <div class="fragment">
+              <p>What's the result of:</p>
+              <pre><code data-trim contenteditable class="ruby">
+"9z".succ #=> ?
+              </code></pre>
+            </div>
+
+            <pre class="fragment"><code data-trim contenteditable class="ruby">
+"9z".succ #=> "10a"
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>Bonus</h3>
+            <p>What's the result of:</p>
+            <pre><code data-trim contenteditable class="ruby">
+"z9".succ #=> ?
+            </code></pre>
+
+            <pre class="fragment"><code data-trim contenteditable class="ruby">
+  "z9".succ #=> "aa0"
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Surprising Interfaces</h2>
+
+            <p class="fragment">…new features were added when needed</p>
+            <p class="fragment">…sometimes with terrible naming</p>
+          </section>
+
+          <section>
+            <h2>Script Lines</h2>
+            <p>There is a feature in Ruby...</p>
+          </section>
+
+          <section>
+            <h2>Is it?</h2>
+              <p><code>script_lines</code></p>
+              <p><code>SCRIPT_LINES</code></p>
+              <p><code>__SCRIPT_LINES</code></p>
+              <p><code>__script_lines__</code></p>
+              <p><code>SCRIPT_LINES__</code></p>
+              <p><code>Ruby::DebugInfo::SCRIPT_LINES</code></p>
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Script Lines</h2>
+            <pre><code data-trim contenteditable class="ruby">
+  SCRIPT_LINES__ = {} unless defined? SCRIPT_LINES__
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>SCRIPT_LINES__</h2>
+              WEIRD. What gives with the trailing underscores?<br>
+              It’s such a big constant that it leaves a two-character shadow!!<br>
+              — <strong>why the lucky stiff</strong>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Surprising Object Representation</h2>
+          </section>
+
+          <section>
+            <pre><code data-trim contenteditable class="ruby">
+module A
+end
+
+class B
+  def initialize
+    p 42
+  end
+end
+
+A, B = B, A
+            </pre></code>
+            <pre class="fragment"><code data-trim contenteditable class="ruby">
+A.new  #=> #&lt;B:0x00000002744008&gt;
+# 42
+            </pre></code>
+          </section>
+
+          <section>
+            <pre><code data-trim contenteditable class="ruby">
+require 'stringio'
+def shuffle_ruby(n=rand(50))
+  mod, os, e, sio = Module, ObjectSpace, Exception, StringIO
+  stderr, $stderr = $stderr, sio.new
+  n.times{
+    begin
+      m1 = os.each_object(mod).to_a.sample
+      m2 = os.each_object(mod).to_a.sample
+      puts "Swap #{m1} and #{m2}"
+      eval "#{m1}, #{m2} = #{m2}, #{m1}"
+    rescue e
+    end
+  }
+  $stderr = stderr
+  puts "Ruby shuffled (#{n} swaps)"
+end
+            </pre></code>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Surprising CLI Options</h2>
+          </section>
+
+          <section>
+            <h2>IRB Inspectors</h2>
+            <p>Specify how IRB results are displayed</p>
+          </section>
+
+          <section>
+            <h2>IRB Inspectors</h2>
+            <pre><code data-trim contenteditable class="ruby">
+$ irb -f --inspect yaml
+irb(main):001:0> [42]
+=> ---
+- 42
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>IRB Inspectors</h2>
+            <pre><code data-trim contenteditable class="ruby">
+$ irb -f --inspect marshal
+irb(main):001:0> 42
+=> i/
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>IRB Inspectors</h2>
+            <pre><code data-trim contenteditable class="ruby">
+$ irb -f --inspect "{ |r| r.to_s.reverse }"
+irb(main):001:0> 42
+=> 24
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>IRB Inspectors</h2>
+            <pre><code data-trim contenteditable class="ruby">
+# in lib/irb/context.rb
+case opt
+# ...
+when /^\s*\{.*\}\s*$/
+  begin
+    inspector = eval "proc#{opt}"
+  rescue Exception
+    puts "Can't switch inspect mode(#{opt})."
+    return
+  end
+  self.inspect_mode = inspector
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Surprising Future</h2>
+          </section>
+
+          <section>
+            <h2>Ruby will not get boring \o/<h2>
+            <p class="fragment"><br/>Infinite ranges: <code>0..</code></p>
+            <div class="fragment"><p><br/>Classes definitions can start with uppercased Unicode letters!</p>
+              <pre class="fragment">
+class ℛ𝘂ᖯʏ
+  def initialize
+    # …
+  end
+end</pre>
+            </div>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>From Ruby Quiz</h3>
+            <br/>
+            <p>How many ways does Ruby provide to embed a NULL Byte?</p>
+            <div class="fragment">
+              <p>Hint: For example, <strong>"\x00"</strong> embeds a null byte</p>
+            </div>
+            <div class="fragment">
+              <br/>
+              <p><em>A</em>: 40</p>
+            </div>
+          </section>
+
+          <section>
+            <h3>Bonus Question</h3>
+            <p>What?</p>
+            <p>
+              <span class="fragment"><strong>"\0"</strong></span>
+              <span class="fragment"><strong>"\x00"</strong></span>
+              <span class="fragment"><strong>"\x0"</strong></span>
+              <span class="fragment"><strong>"\u0000"</strong></span>
+              <span class="fragment"><strong>"\u{0000}"</strong></span>
+              <span class="fragment"><strong>"\u{000}"</strong></span>
+              <span class="fragment"><strong>"\u{00}"</strong></span>
+              <span class="fragment"><strong>"\u{0}"</strong></span>
+              <span class="fragment"><strong>"\u{00000}"</strong></span>
+              <span class="fragment"><strong>"\u{000000}"</strong></span>
+              <span class="fragment"><strong>"\000"</strong></span>
+              <span class="fragment"><strong>"\00"</strong></span>
+              <span class="fragment"><strong>"\C-0"</strong></span>
+              <span class="fragment"><strong>"\C-\x00"</strong></span>
+              <span class="fragment"><strong>"\C-\x0"</strong></span>
+              <span class="fragment"><strong>"\C-\000"</strong></span>
+              <span class="fragment"><strong>"\C-\00"</strong></span>
+              <span class="fragment"><strong>"\C-@"</strong></span>
+              <span class="fragment"><strong>"\C-\x40"</strong></span>
+              <span class="fragment"><strong>"\C-\100"</strong></span>
+              <span class="fragment"><strong>"\C-`"</strong></span>
+              <span class="fragment"><strong>"\C-\x60"</strong></span>
+              <span class="fragment"><strong>"\C-\140"</strong></span>
+              <span class="fragment"><strong>"\C- "</strong></span>
+              <span class="fragment"><strong>"\C-\x20"</strong></span>
+              <span class="fragment"><strong>"\C-\40"</strong></span>
+              <span class="fragment"><strong>"\c0"</strong></span>
+              <span class="fragment"><strong>"\c\x00"</strong></span>
+              <span class="fragment"><strong>"\c\x0"</strong></span>
+              <span class="fragment"><strong>"\c\000"</strong></span>
+              <span class="fragment"><strong>"\c\00"</strong></span>
+              <span class="fragment"><strong>"\c@"</strong></span>
+              <span class="fragment"><strong>"\c\x40"</strong></span>
+              <span class="fragment"><strong>"\c\100"</strong></span>
+              <span class="fragment"><strong>"\c`"</strong></span>
+              <span class="fragment"><strong>"\c\x60"</strong></span>
+              <span class="fragment"><strong>"\c\140"</strong></span>
+              <span class="fragment"><strong>"\c "</strong></span>
+              <span class="fragment"><strong>"\c\x20"</strong></span>
+              <span class="fragment"><strong>"\c\40"</strong></span>
+            </p>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2><span>Thank You!</span></h2>
+            <p><a href="https://twitter.com/JanLelis">idiosyncratic-ruby.com</a></p>
+            <p><a href="https://twitter.com/JanLelis">@JanLelis</a></p>
+          </section>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        slideNumber: true,
+
+        theme: Reveal.getQueryHash().theme || 'default', // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+    </script>
+  </body>
+</html>
